@@ -1,4 +1,4 @@
-package com.example.weatherapp.presentation
+package com.example.weatherapplication.presentation.bar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
