@@ -19,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.weatherapp.presentation.AppBar
 import com.example.weatherapp.presentation.BottomBar
 
 
@@ -119,7 +118,7 @@ fun GreetingScreen(navController: NavController) {
                 text = city,
                 color = Color.Blue,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 35.dp),
+                modifier = Modifier.padding(top = 45.dp),
             )
             Text(
                 text = "$currentWeather °C",

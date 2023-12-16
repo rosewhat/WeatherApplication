@@ -1,4 +1,4 @@
-package com.example.weatherapp.presentation
+package com.example.weatherapplication
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -36,7 +36,7 @@ fun AppBar(title: String, navController: NavController) {
                 contentDescription = "Menu",
                 modifier = Modifier
                     .padding(start = 6.dp, top = 8.dp, bottom = 8.dp)
-                    .clickable {                           navController.navigate("Search")
+                    .clickable {
                         navController.navigate("Menu")
                     }
             )
