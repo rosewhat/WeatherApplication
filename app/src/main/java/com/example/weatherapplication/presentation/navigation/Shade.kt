@@ -1,10 +1,13 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.presentation.navigation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -12,6 +15,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,24 +24,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.weatherapp.presentation.BottomBar
-
+import com.example.weatherapplication.domain.GetTimeWeather
+import com.example.weatherapplication.domain.GetTypeWeather
+import com.example.weatherapplication.presentation.viewModel.WeatherViewModel
+import com.example.weatherapplication.presentation.bar.AppBar
+import com.example.weatherapplication.presentation.bar.BottomBar
 
 
 @Composable
-fun Menu() {
+fun Menu(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Menu",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            text = "Menu", fontSize = 20.sp, fontWeight = FontWeight.Bold
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { }) {
+            MenuItem(text = "Notification") {}
+            MenuItem(text = "Privacy Policy") {}
+            MenuItem(text = "General Settings") {}
+            MenuItem(text = "Help") {}
+            MenuItem(text = "About us") {}
+            MenuItem(text = "Logout") {}
+        }
     }
 }
 
@@ -50,9 +67,7 @@ fun Calendar() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Calendar",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            text = "Calendar", fontSize = 20.sp, fontWeight = FontWeight.Bold
         )
     }
 }
@@ -67,46 +82,36 @@ fun Share() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Share",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            text = "Share", fontSize = 20.sp, fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
+fun MenuItem(text: String, onClick: () -> Unit) {
+    Text(text = text,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(8.dp))
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun GreetingScreen(navController: NavController) {
-    val city = "Санкт - Петербург"
-    val currentWeather = 20
-    val weatherTypeList = listOf(
-        GetTypeWeather(35, "Жарко"),
-        GetTypeWeather(25, "Тепло"),
-        GetTypeWeather(20, "Тепло"),
-        GetTypeWeather(20, "Тепло"),
-        GetTypeWeather(9, "Холодно"),
-        GetTypeWeather(3, "Холодно"),
-        GetTypeWeather(5, "Холодно"),
-    )
-    val weatherTimeList = listOf(
-        GetTimeWeather(5, "9:00"),
-        GetTimeWeather(10, "12:00"),
-        GetTimeWeather(15, "15:00"),
-        GetTimeWeather(20, "18:00"),
-        GetTimeWeather(25, "21:00"),
-        GetTimeWeather(30, "22:00"),
-        GetTimeWeather(35, "23:00"),
-    )
+fun GreetingScreen(navController: NavController, viewModel: WeatherViewModel) {
+    val city = viewModel.city
+    val currentWeather = viewModel.currentWeather
+    val weatherTypeList = viewModel.weatherTypeList
+    val weatherTimeList = viewModel.weatherTimeList
 
-    Scaffold(
-        topBar = {
-            AppBar(title = "Прогноз погоды", navController = navController)
-        },
-        bottomBar = {
-            BottomBar(navController = navController)
-        }
-    ) {
+    Scaffold(topBar = {
+        AppBar(title = "Прогноз погоды", navController = navController)
+    }, bottomBar = {
+        BottomBar(navController = navController)
+    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -168,13 +173,10 @@ fun TimeWeather(getTypeWeather: GetTimeWeather) {
             .padding(20.dp, 60.dp, 0.dp, 20.dp),
     ) {
         Text(
-            text = "${getTypeWeather.temp}°C",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold
+            text = "${getTypeWeather.temp}°C", fontSize = 12.sp, fontWeight = FontWeight.Bold
         )
         Text(
-            text = getTypeWeather.time,
-            fontSize = 12.sp
+            text = getTypeWeather.time, fontSize = 12.sp
         )
     }
 }

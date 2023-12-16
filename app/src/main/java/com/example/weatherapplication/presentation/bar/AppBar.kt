@@ -1,4 +1,4 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.presentation.bar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
